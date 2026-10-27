@@ -31,7 +31,7 @@ export default function AdminLayout({ children }: LayoutProps<"/">) {
           <p className="text-xs font-medium tracking-wide text-zinc-500">CAPTION NYC</p>
           <p className="text-lg font-semibold">Admin Panel</p>
         </div>
-        <nav aria-label="Admin sections" className="overflow-x-auto">
+        <nav aria-label="Admin sections" className="overflow-x-auto md:min-h-0 md:overflow-y-auto">
           <Suspense fallback={<NavList />}>
             <NavLinks />
           </Suspense>

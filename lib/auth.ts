@@ -1,6 +1,7 @@
 import "server-only";
 import { cache } from "react";
 import { redirect } from "next/navigation";
+import { connection } from "next/server";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
@@ -13,6 +14,10 @@ export interface Admin {
 }
 
 export const requireAdmin = cache(async (): Promise<Admin> => {
+  // Admin data is per-request: the Supabase client and our date math read the
+  // clock, which Cache Components forbids during prerendering and prefetching.
+  await connection();
+
   const supabase = await createClient();
 
   const {
