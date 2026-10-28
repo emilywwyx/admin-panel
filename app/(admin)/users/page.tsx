@@ -8,7 +8,7 @@ export default function UsersPage({ searchParams }: PageProps<"/users">) {
   return (
     <>
       <PageHeader title="Users" description="Every profile, with what each person has posted and voted on. Read-only." />
-      <Suspense fallback={<p className="text-sm text-zinc-500">Loading users…</p>}>
+      <Suspense fallback={<p className="text-sm text-muted">Loading users…</p>}>
         <Users searchParams={searchParams} />
       </Suspense>
     </>
@@ -58,9 +58,9 @@ async function Users({ searchParams }: { searchParams: Promise<SearchParams> }) 
       {users.length === 0 ? (
         <Empty>No users match.</Empty>
       ) : (
-        <div className="overflow-x-auto rounded-2xl border border-zinc-800">
+        <div className="overflow-x-auto rounded-[20px] border border-line-soft bg-surface">
           <table className="w-full min-w-[760px] text-left text-sm">
-            <thead className="bg-zinc-900 text-xs text-zinc-400">
+            <thead className="bg-cream-2/60 text-xs font-bold uppercase tracking-[0.06em] text-muted">
               <tr>
                 <th className="px-4 py-3 font-medium">User</th>
                 <th className="px-4 py-3 font-medium">Role</th>
@@ -71,15 +71,15 @@ async function Users({ searchParams }: { searchParams: Promise<SearchParams> }) 
                 <th className="px-4 py-3 font-medium">Joined</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-zinc-800">
+            <tbody className="divide-y divide-line-soft">
               {users.map((user) => (
-                <tr key={user.id} className="hover:bg-zinc-900/60">
+                <tr key={user.id} className="transition-colors duration-200 hover:bg-cream/60">
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-3">
                       <Avatar src={user.avatar_url} name={fullName(user)} />
                       <div className="min-w-0">
-                        <p className="truncate font-medium text-zinc-100">{fullName(user)}</p>
-                        <p className="truncate text-xs text-zinc-500">
+                        <p className="truncate font-medium text-ink">{fullName(user)}</p>
+                        <p className="truncate text-xs text-muted">
                           {user.email ?? <span className="font-mono">{shortId(user.id)}</span>}
                         </p>
                       </div>
@@ -87,18 +87,18 @@ async function Users({ searchParams }: { searchParams: Promise<SearchParams> }) 
                   </td>
                   <td className="px-4 py-3">
                     {user.is_superadmin ? (
-                      <span className="rounded-full bg-violet-500/15 px-2 py-0.5 text-xs font-medium text-violet-300">
+                      <span className="rounded-full bg-ink px-2 py-0.5 text-xs font-medium text-cream">
                         Superadmin
                       </span>
                     ) : (
-                      <span className="text-xs text-zinc-500">Member</span>
+                      <span className="text-xs text-muted">Member</span>
                     )}
                   </td>
                   <td className="px-4 py-3 text-right tabular-nums">{user.photos}</td>
                   <td className="px-4 py-3 text-right tabular-nums">{user.generations}</td>
                   <td className="px-4 py-3 text-right tabular-nums">{user.votesCast}</td>
-                  <td className="px-4 py-3 text-zinc-400">{user.lastActive ? formatDateTime(user.lastActive) : "—"}</td>
-                  <td className="px-4 py-3 text-zinc-400">{formatDate(user.created_at)}</td>
+                  <td className="px-4 py-3 text-muted">{user.lastActive ? formatDateTime(user.lastActive) : "—"}</td>
+                  <td className="px-4 py-3 text-muted">{formatDate(user.created_at)}</td>
                 </tr>
               ))}
             </tbody>

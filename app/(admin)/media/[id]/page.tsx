@@ -12,7 +12,7 @@ import { Field, VibeSelect } from "../fields";
 
 export default function MediaDetailPage({ params, searchParams }: PageProps<"/media/[id]">) {
   return (
-    <Suspense fallback={<p className="text-sm text-zinc-500">Loading photo…</p>}>
+    <Suspense fallback={<p className="text-sm text-muted">Loading photo…</p>}>
       <MediaDetail params={params} searchParams={searchParams} />
     </Suspense>
   );
@@ -46,7 +46,7 @@ async function MediaDetail({
         title={placeName(image.neighborhood)}
         description={`Photo #${image.id} · uploaded ${formatDateTime(image.created_at)} by ${uploader ? fullName(uploader) : "unknown"}`}
         actions={
-          <Link href="/media" className="text-sm text-zinc-400 hover:text-zinc-100">
+          <Link href="/media" className="text-sm text-muted transition-colors duration-200 hover:text-ink">
             ← Back to media
           </Link>
         }
@@ -56,7 +56,7 @@ async function MediaDetail({
       <div className="grid gap-6 xl:grid-cols-[minmax(0,2fr)_minmax(0,3fr)]">
         <div className="space-y-6">
           <Card>
-            <Thumb src={image.image_url} alt={placeName(image.neighborhood)} className="w-full rounded-xl" />
+            <Thumb src={image.image_url} alt={placeName(image.neighborhood)} className="w-full rounded-[16px]" />
           </Card>
 
           <Card title="Edit photo">
@@ -94,7 +94,7 @@ async function MediaDetail({
             ) : (
               <ul className="space-y-4">
                 {captions.map((caption) => (
-                  <li key={caption.id} className="rounded-xl border border-zinc-800 p-4">
+                  <li key={caption.id} className="rounded-[20px] border border-line-soft p-4 transition duration-200 hover:border-line hover:shadow-soft">
                     <form action={updateCaption} className="space-y-3">
                       <input type="hidden" name="id" value={caption.id} />
                       <input type="hidden" name="image_id" value={image.id} />
@@ -111,10 +111,10 @@ async function MediaDetail({
                         <div className="w-36">
                           <VibeSelect defaultValue={caption.vibe} />
                         </div>
-                        <span className="text-xs text-zinc-400">
+                        <span className="text-xs text-muted">
                           ▲ {caption.upvotes} · ▼ {caption.downvotes} · score {caption.score}
                         </span>
-                        <span className="text-xs text-zinc-500">
+                        <span className="text-xs text-muted">
                           {caption.request_id ? "AI generated" : "Added manually"} · {formatDateTime(caption.created_at)}
                         </span>
                         <div className="ml-auto flex gap-2">
@@ -154,7 +154,7 @@ async function MediaDetail({
             ) : (
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-sm">
-                  <thead className="text-xs text-zinc-400">
+                  <thead className="text-xs text-muted">
                     <tr>
                       <th className="pb-2 font-medium">When</th>
                       <th className="pb-2 font-medium">Vibe</th>
@@ -163,16 +163,16 @@ async function MediaDetail({
                       <th className="pb-2 text-right font-medium">Latency</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-zinc-800">
+                  <tbody className="divide-y divide-line-soft">
                     {requests.map((request) => (
-                      <tr key={request.id}>
-                        <td className="py-2 text-zinc-400">{formatDateTime(request.created_at)}</td>
+                      <tr key={request.id} className="transition-colors duration-200 hover:bg-cream/60">
+                        <td className="py-2 text-muted">{formatDateTime(request.created_at)}</td>
                         <td className="py-2"><VibeTag vibe={request.vibe} /></td>
-                        <td className="py-2 font-mono text-xs text-zinc-400">{request.model ?? "—"}</td>
-                        <td className={`py-2 ${request.status === "success" ? "text-emerald-400" : "text-red-400"}`}>
+                        <td className="py-2 font-mono text-xs text-muted">{request.model ?? "—"}</td>
+                        <td className={`py-2 ${request.status === "success" ? "text-accent-deep" : "text-danger"}`}>
                           {request.status === "success" ? "✓ Success" : "✕ Failed"}
                         </td>
-                        <td className="py-2 text-right tabular-nums text-zinc-300">{formatDuration(request.duration_ms)}</td>
+                        <td className="py-2 text-right tabular-nums text-ink">{formatDuration(request.duration_ms)}</td>
                       </tr>
                     ))}
                   </tbody>

@@ -56,7 +56,7 @@ export function NavList({ active = () => false }: { active?: (href: string) => b
     <div className="flex gap-4 md:flex-col">
       {NAV_SECTIONS.map((section) => (
         <div key={section.label} className="shrink-0">
-          <p className="mb-1 hidden px-3 text-[11px] font-medium uppercase tracking-wide text-zinc-600 md:block">
+          <p className="mb-1.5 hidden px-3 text-[11px] font-bold uppercase tracking-[0.08em] text-muted md:block">
             {section.label}
           </p>
           <ul className="flex gap-1 md:flex-col">
@@ -64,8 +64,8 @@ export function NavList({ active = () => false }: { active?: (href: string) => b
               <li key={item.href}>
                 <Link
                   href={item.href}
-                  className={`block whitespace-nowrap rounded-lg px-3 py-1.5 text-sm ${
-                    active(item.href) ? "bg-zinc-800 font-medium text-zinc-50" : "text-zinc-400 hover:bg-zinc-900 hover:text-zinc-100"
+                  className={`block whitespace-nowrap rounded-full px-3.5 py-2 text-sm font-semibold transition-colors duration-200 ${
+                    active(item.href) ? "bg-surface text-ink ring-1 ring-line-soft" : "text-muted hover:bg-surface/60 hover:text-ink"
                   }`}
                 >
                   {item.label}

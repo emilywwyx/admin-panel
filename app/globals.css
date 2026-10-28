@@ -1,20 +1,56 @@
 @import "tailwindcss";
 
-:root {
-  color-scheme: dark;
-  --background: #09090b;
-  --foreground: #f4f4f5;
+/* Same palette and type as the CaptionNYC app (genai-hello/app/globals.css). */
+@theme inline {
+  --color-cream: #f7f1e4;
+  --color-cream-2: #f2eada;
+  --color-cream-3: #e6dac2;
+  --color-surface: #ffffff;
+  --color-field: #fbf8f1;
+  --color-ink: #1f1d1a;
+  --color-muted: #5a5449; /* one step darker than the app's #6b6457: admin text is smaller and denser */
+  --color-line: #ddd2bc;
+  --color-line-soft: #ece3d0;
+  --color-accent: #34d46a;
+  --color-accent-hover: #2cc25f;
+  --color-accent-soft: #e3f8ea;
+  --color-accent-deep: #17663a;
+  --color-danger: #a33a1c;
+  --color-danger-soft: #fce6df;
+  /* Hover shadows from the app: .stat/.hof-item, .post-card, .my-post */
+  --shadow-card: 0 24px 60px rgba(120, 100, 60, 0.1);
+  --shadow-lift: 0 22px 50px rgba(120, 100, 60, 0.16);
+  --shadow-soft: 0 10px 28px rgba(120, 100, 60, 0.08);
+  --font-sans: var(--font-archivo), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+:root {
+  color-scheme: light;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  background: var(--color-cream);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3 {
+  letter-spacing: -0.03em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+  }
+}
+
+:focus-visible {
+  outline: 3px solid #1f6feb;
+  outline-offset: 2px;
 }

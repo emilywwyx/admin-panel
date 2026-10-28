@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Suspense } from "react";
-import { Empty, FilterLink, Flash, PageHeader, Pagination, Thumb, VibeTag, inputClass } from "@/components/ui";
+import { Empty, FilterLink, Flash, PageHeader, Pagination, Thumb, VibeTag, inputClass, buttonClass } from "@/components/ui";
 import { PAGE_SIZE, getMediaList } from "@/lib/data";
 import { formatDate, fullName } from "@/lib/format";
 import { pageParam, param, withParams, type SearchParams } from "@/lib/params";
@@ -13,12 +13,12 @@ export default function MediaPage({ searchParams }: PageProps<"/media">) {
         title="Media"
         description="Photos and the AI captions generated for them. Open one to edit or delete it."
         actions={
-          <Link href="/media/new" className="rounded-lg bg-zinc-100 px-4 py-2 text-sm font-medium text-zinc-900 hover:bg-white">
+          <Link href="/media/new" className={buttonClass.primary}>
             New photo
           </Link>
         }
       />
-      <Suspense fallback={<p className="text-sm text-zinc-500">Loading media…</p>}>
+      <Suspense fallback={<p className="text-sm text-muted">Loading media…</p>}>
         <MediaGrid searchParams={searchParams} />
       </Suspense>
     </>
@@ -66,18 +66,18 @@ async function MediaGrid({ searchParams }: { searchParams: Promise<SearchParams>
               <li key={item.id}>
                 <Link
                   href={`/media/${item.id}`}
-                  className="block overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-900 hover:border-zinc-600"
+                  className="group block overflow-hidden rounded-[28px] border border-line-soft bg-surface transition duration-200 hover:-translate-y-1 hover:border-line hover:shadow-lift"
                 >
-                  <Thumb src={item.image_url} alt={placeName(item.neighborhood)} className="aspect-[4/3] w-full" />
+                  <Thumb src={item.image_url} alt={placeName(item.neighborhood)} className="aspect-[4/3] w-full transition-transform duration-[450ms] group-hover:scale-[1.04]" />
                   <div className="space-y-3 p-4">
                     <div className="flex items-center justify-between gap-2">
-                      <p className="truncate text-sm font-medium text-zinc-100">{placeName(item.neighborhood)}</p>
+                      <p className="truncate text-sm font-medium text-ink">{placeName(item.neighborhood)}</p>
                       <VibeTag vibe={item.vibe} />
                     </div>
-                    <p className="line-clamp-2 min-h-10 text-sm text-zinc-400">
+                    <p className="line-clamp-2 min-h-10 text-sm text-muted">
                       {best ? `“${best.content}”` : "No captions yet."}
                     </p>
-                    <p className="flex justify-between text-xs text-zinc-500">
+                    <p className="flex justify-between text-xs text-muted">
                       <span>
                         {item.captions.length} captions · by {item.uploader ? fullName(item.uploader) : "unknown"}
                       </span>

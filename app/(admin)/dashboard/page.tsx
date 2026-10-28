@@ -4,13 +4,13 @@ import { BarList, ColumnChart, Heatmap } from "@/components/charts";
 import { Card, Delta, Empty, PageHeader, StatTile, Thumb, VibeTag } from "@/components/ui";
 import { formatCount, formatDuration, formatPercent, fullName } from "@/lib/format";
 import { getDashboard, type FeaturedCaption, type Leader } from "@/lib/stats";
-import { placeName, vibeInfo } from "@/lib/vibes";
+import { placeName } from "@/lib/vibes";
 
 export default function DashboardPage() {
   return (
     <>
       <PageHeader title="Dashboard" description="What the community is captioning, voting on, and laughing at." />
-      <Suspense fallback={<p className="text-sm text-zinc-500">Crunching the numbers…</p>}>
+      <Suspense fallback={<p className="text-sm text-muted">Crunching the numbers…</p>}>
         <Dashboard />
       </Suspense>
     </>
@@ -73,14 +73,12 @@ async function Dashboard() {
                 key: vibe.vibe,
                 label: (
                   <span className="inline-flex items-center gap-2">
-                    <span className="size-2 rounded-full" style={{ background: vibeInfo(vibe.vibe)?.color }} />
-                    {vibeInfo(vibe.vibe)?.label}
-                    <span className="text-xs text-zinc-500">{vibe.captions} captions</span>
+                    <VibeTag vibe={vibe.vibe} />
+                    <span className="text-xs text-muted">{vibe.captions} captions</span>
                   </span>
                 ),
                 value: vibe.approval ?? 0,
                 display: formatPercent(vibe.approval),
-                color: vibeInfo(vibe.vibe)?.color,
                 hint: `${vibe.upvotes} up · ${vibe.downvotes} down`,
               }))}
             />
@@ -96,7 +94,7 @@ async function Dashboard() {
                 key: place.place,
                 label: (
                   <span>
-                    {place.place} <span className="text-xs text-zinc-500">{place.photos} photos</span>
+                    {place.place} <span className="text-xs text-muted">{place.photos} photos</span>
                   </span>
                 ),
                 value: place.perPhoto,
@@ -114,7 +112,7 @@ async function Dashboard() {
             <Metric label="p95 latency" value={formatDuration(generation.p95)} />
           </dl>
           {generation.models.length > 0 && (
-            <ul className="mt-5 space-y-1 border-t border-zinc-800 pt-4 text-xs text-zinc-400">
+            <ul className="mt-5 space-y-1 border-t border-line-soft pt-4 text-xs text-muted">
               {generation.models.map(([model, count]) => (
                 <li key={model} className="flex justify-between gap-2">
                   <span className="truncate font-mono">{model}</span>
@@ -123,7 +121,7 @@ async function Dashboard() {
               ))}
             </ul>
           )}
-          <p className="mt-4 text-xs text-zinc-500">
+          <p className="mt-4 text-xs text-muted">
             {formatPercent(stats.totals.unseenShare)} of captions have never received a vote.
           </p>
         </Card>
@@ -145,8 +143,8 @@ async function Dashboard() {
 function Metric({ label, value }: { label: string; value: string }) {
   return (
     <div>
-      <dt className="text-xs text-zinc-400">{label}</dt>
-      <dd className="mt-1 text-xl font-semibold text-zinc-50">{value}</dd>
+      <dt className="text-xs text-muted">{label}</dt>
+      <dd className="mt-1 text-xl font-semibold text-ink">{value}</dd>
     </div>
   );
 }
@@ -155,11 +153,13 @@ function Spotlight({ title, caption, note }: { title: string; caption: FeaturedC
   return (
     <Card title={title} description={note}>
       {caption ? (
-        <Link href={`/media/${caption.image_id}`} className="flex gap-4 rounded-xl hover:bg-zinc-800/40">
-          <Thumb src={caption.image?.image_url} alt="" className="size-28 shrink-0 rounded-xl" />
+        <Link href={`/media/${caption.image_id}`} className="group flex gap-4 rounded-[20px] p-2 -m-2 transition duration-200 hover:translate-x-1 hover:bg-cream/70">
+          <span className="size-28 shrink-0 overflow-hidden rounded-[14px]">
+            <Thumb src={caption.image?.image_url} alt="" className="size-full transition-transform duration-[450ms] group-hover:scale-[1.08]" />
+          </span>
           <div className="min-w-0 py-1">
-            <p className="text-base text-zinc-100">“{caption.content}”</p>
-            <div className="mt-3 flex flex-wrap items-center gap-2 text-xs text-zinc-400">
+            <p className="text-base text-ink">“{caption.content}”</p>
+            <div className="mt-3 flex flex-wrap items-center gap-2 text-xs text-muted">
               <VibeTag vibe={caption.vibe} />
               <span>{placeName(caption.image?.neighborhood)}</span>
               <span>
@@ -186,7 +186,7 @@ function LeaderCard({ title, leaders, unit }: { title: string; leaders: Leader[]
             key: leader.id,
             label: (
               <span>
-                <span className="mr-2 text-zinc-500">{index + 1}</span>
+                <span className="mr-2 text-muted">{index + 1}</span>
                 {fullName(leader.person)}
               </span>
             ),

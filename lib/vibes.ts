@@ -3,15 +3,15 @@ export type Vibe = "funny" | "relatable" | "deadpan" | "columbia";
 export interface VibeInfo {
   id: Vibe;
   label: string;
-  // Categorical slots 1-4 of the dark chart palette, validated against zinc-900.
-  color: string;
+  // Same pastel tag colors as the CaptionNYC app's .voice-* classes.
+  tag: string;
 }
 
 export const VIBES: VibeInfo[] = [
-  { id: "funny", label: "Funny", color: "#3987e5" },
-  { id: "relatable", label: "Relatable", color: "#d95926" },
-  { id: "deadpan", label: "Deadpan", color: "#199e70" },
-  { id: "columbia", label: "Columbia", color: "#c98500" },
+  { id: "funny", label: "Funny", tag: "bg-[#ffe9a8] text-[#5c4300]" },
+  { id: "relatable", label: "Relatable", tag: "bg-[#dce9ff] text-[#1d3f7a]" },
+  { id: "deadpan", label: "Deadpan", tag: "bg-[#e7e2d8] text-[#423c33]" },
+  { id: "columbia", label: "Columbia", tag: "bg-[#cbe4f4] text-[#0f4766]" },
 ];
 
 export function isVibe(value: unknown): value is Vibe {

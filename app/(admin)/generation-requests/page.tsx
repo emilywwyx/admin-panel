@@ -11,7 +11,7 @@ export default function GenerationRequestsPage({ searchParams }: PageProps<"/gen
   return (
     <>
       <PageHeader title="Generation requests" description="Every time someone asked the model for captions. Read-only." />
-      <Suspense fallback={<p className="text-sm text-zinc-500">Loading requests…</p>}>
+      <Suspense fallback={<p className="text-sm text-muted">Loading requests…</p>}>
         <Requests searchParams={searchParams} />
       </Suspense>
     </>
@@ -42,9 +42,9 @@ async function Requests({ searchParams }: { searchParams: Promise<SearchParams> 
       {requests.length === 0 ? (
         <Empty>No requests yet.</Empty>
       ) : (
-        <div className="overflow-x-auto rounded-2xl border border-zinc-800">
+        <div className="overflow-x-auto rounded-[20px] border border-line-soft bg-surface">
           <table className="w-full min-w-[860px] text-left text-sm">
-            <thead className="bg-zinc-900 text-xs text-zinc-400">
+            <thead className="bg-cream-2/60 text-xs font-bold uppercase tracking-[0.06em] text-muted">
               <tr>
                 <th className="px-4 py-3 font-medium">#</th>
                 <th className="px-4 py-3 font-medium">When</th>
@@ -58,27 +58,27 @@ async function Requests({ searchParams }: { searchParams: Promise<SearchParams> 
                 <th className="px-4 py-3" />
               </tr>
             </thead>
-            <tbody className="divide-y divide-zinc-800">
+            <tbody className="divide-y divide-line-soft">
               {requests.map((request) => (
-                <tr key={request.id} className="hover:bg-zinc-900/60">
-                  <td className="px-4 py-3 font-mono text-xs text-zinc-500">{request.id}</td>
-                  <td className="whitespace-nowrap px-4 py-3 text-zinc-400">{formatDateTime(request.created_at)}</td>
-                  <td className="whitespace-nowrap px-4 py-3 text-zinc-200">{fullName(request.requester)}</td>
+                <tr key={request.id} className="transition-colors duration-200 hover:bg-cream/60">
+                  <td className="px-4 py-3 font-mono text-xs text-muted">{request.id}</td>
+                  <td className="whitespace-nowrap px-4 py-3 text-muted">{formatDateTime(request.created_at)}</td>
+                  <td className="whitespace-nowrap px-4 py-3 text-ink">{fullName(request.requester)}</td>
                   <td className="px-4 py-3">
-                    <Link href={`/media/${request.image_id}`} className="flex items-center gap-2 hover:text-zinc-50">
+                    <Link href={`/media/${request.image_id}`} className="flex items-center gap-2 transition-colors duration-200 hover:text-accent-deep">
                       <Thumb src={request.image?.image_url} alt="" className="size-8 shrink-0 rounded-md" />
-                      <span className="truncate text-zinc-300">{placeName(request.image?.neighborhood)}</span>
+                      <span className="truncate text-ink">{placeName(request.image?.neighborhood)}</span>
                     </Link>
                   </td>
                   <td className="px-4 py-3"><VibeTag vibe={request.vibe} /></td>
-                  <td className="px-4 py-3 font-mono text-xs text-zinc-400">{request.model ?? "—"}</td>
-                  <td className={`whitespace-nowrap px-4 py-3 ${request.status === "success" ? "text-emerald-400" : "text-red-400"}`}>
+                  <td className="px-4 py-3 font-mono text-xs text-muted">{request.model ?? "—"}</td>
+                  <td className={`whitespace-nowrap px-4 py-3 ${request.status === "success" ? "text-accent-deep" : "text-danger"}`}>
                     {request.status === "success" ? "✓ Success" : "✕ Failed"}
                   </td>
                   <td className="px-4 py-3 text-right tabular-nums">{request.captions.length}</td>
-                  <td className="px-4 py-3 text-right tabular-nums text-zinc-300">{formatDuration(request.duration_ms)}</td>
+                  <td className="px-4 py-3 text-right tabular-nums text-ink">{formatDuration(request.duration_ms)}</td>
                   <td className="px-4 py-3 text-right">
-                    <Link href={`/llm-responses#request-${request.id}`} className="text-xs text-zinc-400 hover:text-zinc-100">
+                    <Link href={`/llm-responses#request-${request.id}`} className="text-xs text-muted transition-colors duration-200 hover:text-ink">
                       Response →
                     </Link>
                   </td>

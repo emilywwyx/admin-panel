@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { deleteResource, saveResource } from "@/app/(admin)/resource-actions";
 import { SubmitButton } from "@/components/buttons";
-import { Card, Empty, Flash, PageHeader, inputClass, labelClass } from "@/components/ui";
+import { Card, Empty, Flash, PageHeader, inputClass, labelClass, buttonClass } from "@/components/ui";
 import { getDb } from "@/lib/auth";
 import { formatDate } from "@/lib/format";
 import { param, type SearchParams } from "@/lib/params";
@@ -23,7 +23,7 @@ export function ResourcePage({
   return (
     <>
       <PageHeader title={resource.title} description={resource.description} />
-      <Suspense fallback={<p className="text-sm text-zinc-500">Loading…</p>}>
+      <Suspense fallback={<p className="text-sm text-muted">Loading…</p>}>
         <ResourceView resourceKey={key} resource={resource} searchParams={searchParams} />
       </Suspense>
     </>
@@ -98,7 +98,7 @@ async function ResourceView({
           <div className="flex items-center gap-3">
             <SubmitButton>{editing ? "Save changes" : `Create ${resource.singular}`}</SubmitButton>
             {editing && (
-              <Link href={resource.path} className="text-sm text-zinc-400 hover:text-zinc-100">
+              <Link href={resource.path} className="text-sm text-muted transition-colors duration-200 hover:text-ink">
                 Cancel
               </Link>
             )}
@@ -109,9 +109,9 @@ async function ResourceView({
       {rows.length === 0 ? (
         <Empty>No {resource.title.toLowerCase()} yet.</Empty>
       ) : (
-        <div className="overflow-x-auto rounded-2xl border border-zinc-800">
+        <div className="overflow-x-auto rounded-[20px] border border-line-soft bg-surface">
           <table className="w-full min-w-[640px] text-left text-sm">
-            <thead className="bg-zinc-900 text-xs text-zinc-400">
+            <thead className="bg-cream-2/60 text-xs font-bold uppercase tracking-[0.06em] text-muted">
               <tr>
                 {columns.map((field) => (
                   <th key={field.name} className="px-4 py-3 font-medium">{field.label}</th>
@@ -120,22 +120,22 @@ async function ResourceView({
                 <th className="px-4 py-3" />
               </tr>
             </thead>
-            <tbody className="divide-y divide-zinc-800">
+            <tbody className="divide-y divide-line-soft">
               {rows.map((row) => (
-                <tr key={row.id} className={row.id === editing?.id ? "bg-zinc-900" : "hover:bg-zinc-900/60"}>
+                <tr key={row.id} className={row.id === editing?.id ? "bg-accent-soft/60" : "transition-colors duration-200 hover:bg-cream/60"}>
                   {columns.map((field) => (
-                    <td key={field.name} className="max-w-xs px-4 py-3 align-top text-zinc-200">
+                    <td key={field.name} className="max-w-xs px-4 py-3 align-top text-ink">
                       <CellValue field={field} value={row[field.name]} options={options.get(field.name)} />
                     </td>
                   ))}
-                  <td className="whitespace-nowrap px-4 py-3 align-top text-zinc-500">
+                  <td className="whitespace-nowrap px-4 py-3 align-top text-muted">
                     {row.created_at ? formatDate(row.created_at) : "—"}
                   </td>
                   <td className="px-4 py-3 align-top">
                     <div className="flex justify-end gap-2">
                       <Link
                         href={`${resource.path}?edit=${row.id}`}
-                        className="rounded-lg border border-zinc-700 px-3 py-2 text-sm text-zinc-200 hover:bg-zinc-800"
+                        className={buttonClass.secondary}
                       >
                         Edit
                       </Link>
@@ -172,8 +172,8 @@ function FieldInput({
 
   if (field.type === "checkbox") {
     return (
-      <label className="flex items-center gap-2 self-end pb-2 text-sm text-zinc-200">
-        <input type="checkbox" name={field.name} defaultChecked={value === undefined ? true : Boolean(value)} className="size-4 accent-zinc-100" />
+      <label className="flex items-center gap-2 self-end pb-2 text-sm text-ink">
+        <input type="checkbox" name={field.name} defaultChecked={value === undefined ? true : Boolean(value)} className="size-4 accent-ink" />
         {field.label}
       </label>
     );
@@ -220,11 +220,11 @@ function CellValue({
   options?: { value: string; label: string }[];
 }) {
   if (value === null || value === undefined || value === "") {
-    return <span className="text-zinc-600">—</span>;
+    return <span className="text-muted">—</span>;
   }
 
   if (field.type === "checkbox") {
-    return value ? <span className="text-emerald-400">Yes</span> : <span className="text-zinc-500">No</span>;
+    return value ? <span className="text-accent-deep">Yes</span> : <span className="text-muted">No</span>;
   }
 
   if (options) {

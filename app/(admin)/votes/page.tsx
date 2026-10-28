@@ -10,7 +10,7 @@ export default function VotesPage({ searchParams }: PageProps<"/votes">) {
   return (
     <>
       <PageHeader title="Votes" description="Every upvote and downvote, plus how captions rank. Read-only." />
-      <Suspense fallback={<p className="text-sm text-zinc-500">Loading votes…</p>}>
+      <Suspense fallback={<p className="text-sm text-muted">Loading votes…</p>}>
         <Votes searchParams={searchParams} />
       </Suspense>
     </>
@@ -52,7 +52,7 @@ async function Votes({ searchParams }: { searchParams: Promise<SearchParams> }) 
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full min-w-[680px] text-left text-sm">
-              <thead className="text-xs text-zinc-400">
+              <thead className="text-xs text-muted">
                 <tr>
                   <th className="pb-3 font-medium">When</th>
                   <th className="pb-3 font-medium">Voter</th>
@@ -60,20 +60,20 @@ async function Votes({ searchParams }: { searchParams: Promise<SearchParams> }) 
                   <th className="pb-3 font-medium">Caption</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-zinc-800">
+              <tbody className="divide-y divide-line-soft">
                 {votes.map((vote) => (
-                  <tr key={vote.id} className="align-top">
-                    <td className="whitespace-nowrap py-3 pr-4 text-zinc-400">{formatDateTime(vote.created_at)}</td>
-                    <td className="whitespace-nowrap py-3 pr-4 text-zinc-200">{fullName(vote.voter)}</td>
+                  <tr key={vote.id} className="align-top transition-colors duration-200 hover:bg-cream/60">
+                    <td className="whitespace-nowrap py-3 pr-4 text-muted">{formatDateTime(vote.created_at)}</td>
+                    <td className="whitespace-nowrap py-3 pr-4 text-ink">{fullName(vote.voter)}</td>
                     <td className="py-3 pr-4"><VoteTag vote={vote.vote} /></td>
                     <td className="py-3">
                       {vote.caption ? (
-                        <Link href={`/media/${vote.caption.image_id}`} className="flex items-center gap-3 hover:text-zinc-50">
+                        <Link href={`/media/${vote.caption.image_id}`} className="flex items-center gap-3 transition-colors duration-200 hover:text-accent-deep">
                           <Thumb src={vote.caption.image?.image_url} alt="" className="size-10 shrink-0 rounded-lg" />
-                          <span className="line-clamp-2 text-zinc-300">“{vote.caption.content}”</span>
+                          <span className="line-clamp-2 text-ink">“{vote.caption.content}”</span>
                         </Link>
                       ) : (
-                        <span className="text-zinc-500">Deleted caption</span>
+                        <span className="text-muted">Deleted caption</span>
                       )}
                     </td>
                   </tr>
@@ -98,17 +98,19 @@ function Ranking({ title, captions }: { title: string; captions: RankedCaption[]
         <ol className="space-y-3">
           {captions.map((caption, index) => (
             <li key={caption.id}>
-              <Link href={`/media/${caption.image_id}`} className="flex items-center gap-3 rounded-lg hover:bg-zinc-800/40">
-                <span className="w-4 text-right text-xs text-zinc-500">{index + 1}</span>
-                <Thumb src={caption.image?.image_url} alt="" className="size-10 shrink-0 rounded-lg" />
+              <Link href={`/media/${caption.image_id}`} className="group flex items-center gap-3 rounded-[14px] p-1.5 -m-1.5 transition duration-200 hover:translate-x-1 hover:bg-cream/70">
+                <span className="w-4 text-right text-xs text-muted">{index + 1}</span>
+                <span className="size-10 shrink-0 overflow-hidden rounded-lg">
+                  <Thumb src={caption.image?.image_url} alt="" className="size-full transition-transform duration-[450ms] group-hover:scale-[1.08]" />
+                </span>
                 <div className="min-w-0 flex-1">
-                  <p className="truncate text-sm text-zinc-200">“{caption.content}”</p>
-                  <p className="text-xs text-zinc-500">{placeName(caption.image?.neighborhood)}</p>
+                  <p className="truncate text-sm text-ink">“{caption.content}”</p>
+                  <p className="text-xs text-muted">{placeName(caption.image?.neighborhood)}</p>
                 </div>
-                <span className="shrink-0 text-right text-xs tabular-nums text-zinc-300">
+                <span className="shrink-0 text-right text-xs tabular-nums text-ink">
                   {caption.score > 0 ? "+" : ""}
                   {caption.score}
-                  <span className="block text-zinc-500">▲{caption.upvotes} ▼{caption.downvotes}</span>
+                  <span className="block text-muted">▲{caption.upvotes} ▼{caption.downvotes}</span>
                 </span>
               </Link>
             </li>

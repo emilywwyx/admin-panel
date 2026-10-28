@@ -13,7 +13,7 @@ export default function NewMediaPage({ searchParams }: PageProps<"/media/new">) 
         title="New photo"
         description="Upload a photo (or link one). You can add captions to it on the next screen."
         actions={
-          <Link href="/media" className="text-sm text-zinc-400 hover:text-zinc-100">
+          <Link href="/media" className="text-sm text-muted transition-colors duration-200 hover:text-ink">
             ← Back to media
           </Link>
         }
@@ -28,7 +28,7 @@ export default function NewMediaPage({ searchParams }: PageProps<"/media/new">) 
               type="file"
               name="file"
               accept="image/jpeg,image/png,image/webp"
-              className="block w-full text-sm text-zinc-300 file:mr-3 file:cursor-pointer file:rounded-lg file:border-0 file:bg-zinc-800 file:px-3 file:py-2 file:text-zinc-100"
+              className="block w-full text-sm text-ink file:mr-3 file:cursor-pointer file:rounded-full file:border file:border-line file:bg-surface file:px-4 file:py-2 file:text-xs file:font-bold file:uppercase file:tracking-[0.08em] file:text-ink file:transition file:duration-150 hover:file:-translate-y-px hover:file:border-ink"
             />
           </Field>
           <Field label="…or an image URL">

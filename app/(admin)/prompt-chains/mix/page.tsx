@@ -6,7 +6,6 @@ import { Card, Empty, Flash, PageHeader, VibeTag, inputClass } from "@/component
 import { formatDateTime, formatPercent } from "@/lib/format";
 import { param, type SearchParams } from "@/lib/params";
 import { getPromptChains } from "@/lib/pipeline";
-import { vibeInfo } from "@/lib/vibes";
 import { updateMix } from "../actions";
 
 export default function MixPage({ searchParams }: PageProps<"/prompt-chains/mix">) {
@@ -16,12 +15,12 @@ export default function MixPage({ searchParams }: PageProps<"/prompt-chains/mix"
         title="Prompt chain mix"
         description="How often each chain is picked when the app chooses one at random. Share = weight ÷ total weight of active chains."
         actions={
-          <Link href="/prompt-chains" className="text-sm text-zinc-400 hover:text-zinc-100">
+          <Link href="/prompt-chains" className="text-sm text-muted transition-colors duration-200 hover:text-ink">
             ← All chains
           </Link>
         }
       />
-      <Suspense fallback={<p className="text-sm text-zinc-500">Loading mix…</p>}>
+      <Suspense fallback={<p className="text-sm text-muted">Loading mix…</p>}>
         <Mix searchParams={searchParams} />
       </Suspense>
     </>
@@ -52,14 +51,13 @@ async function Mix({ searchParams }: { searchParams: Promise<SearchParams> }) {
             label: chain.name,
             value: share(chain),
             display: chain.mix?.is_active ? formatPercent(share(chain)) : "Off",
-            color: vibeInfo(chain.vibe)?.color,
           }))}
         />
       </Card>
 
-      <div className="overflow-x-auto rounded-2xl border border-zinc-800">
+      <div className="overflow-x-auto rounded-[20px] border border-line-soft bg-surface">
         <table className="w-full min-w-[640px] text-left text-sm">
-          <thead className="bg-zinc-900 text-xs text-zinc-400">
+          <thead className="bg-cream-2/60 text-xs font-bold uppercase tracking-[0.06em] text-muted">
             <tr>
               <th className="px-4 py-3 font-medium">Chain</th>
               <th className="px-4 py-3 font-medium">Weight</th>
@@ -68,15 +66,15 @@ async function Mix({ searchParams }: { searchParams: Promise<SearchParams> }) {
               <th className="px-4 py-3" />
             </tr>
           </thead>
-          <tbody className="divide-y divide-zinc-800">
+          <tbody className="divide-y divide-line-soft">
             {chains.map((chain) => {
               const formId = `mix-${chain.id}`;
 
               return (
-                <tr key={chain.id}>
+                <tr key={chain.id} className="transition-colors duration-200 hover:bg-cream/60">
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-3">
-                      <span className="font-medium text-zinc-100">{chain.name}</span>
+                      <span className="font-medium text-ink">{chain.name}</span>
                       <VibeTag vibe={chain.vibe} />
                     </div>
                   </td>
@@ -101,10 +99,10 @@ async function Mix({ searchParams }: { searchParams: Promise<SearchParams> }) {
                       type="checkbox"
                       defaultChecked={chain.mix?.is_active ?? false}
                       aria-label={`${chain.name} active`}
-                      className="size-4 accent-zinc-100"
+                      className="size-4 accent-ink"
                     />
                   </td>
-                  <td className="px-4 py-3 text-zinc-500">{chain.mix ? formatDateTime(chain.mix.updated_at) : "—"}</td>
+                  <td className="px-4 py-3 text-muted">{chain.mix ? formatDateTime(chain.mix.updated_at) : "—"}</td>
                   <td className="px-4 py-3 text-right">
                     <form id={formId} action={updateMix}>
                       <input type="hidden" name="chain_id" value={chain.id} />
